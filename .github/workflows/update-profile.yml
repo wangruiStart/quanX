@@ -1,0 +1,44 @@
+name: 更新私人 QuanX 配置
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - personal.json
+      - selfProxy.conf
+      - scripts/build-profile.mjs
+      - tests/build-profile.test.mjs
+      - .github/workflows/update-profile.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-quanx-profile
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: 验证合并行为
+        run: node --test
+      - name: 获取最新墨鱼配置并合并私人设置
+        run: node scripts/build-profile.mjs
+      - name: 保存生成配置
+        run: |
+          git add QuantumultX.conf
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git commit -m "chore: 更新墨鱼配置并保留私人设置"
+          git push origin HEAD:main
