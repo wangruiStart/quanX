@@ -1,6 +1,6 @@
 # 私人 QuanX 配置
 
-将最新墨鱼配置与 `personal.json` 合并，生成自己的 `QuantumultX.conf`。不需要每次更新后重新手改 DNS、策略组和资源开关。使用 JavaScript，Node.js 22+ 即可运行，无第三方依赖。
+将最新墨鱼配置与 `personal.json` 合并，生成自己的 `QuantumultX.conf`。不需要每次更新后重新手改 DNS、策略组和资源开关。使用 JavaScript，Node.js 22+ 即可运行，无第三方依赖，不需要执行依赖安装。
 
 QuanX 的远程分流和重写资源只管理对应资源，不能用一个资源链接覆盖 DNS 和策略组。因此，需要使用这里生成的完整配置链接。
 
@@ -29,8 +29,8 @@ QuanX 的远程分流和重写资源只管理对应资源，不能用一个资�
 在项目目录执行：
 
 ```sh
-node scripts/build-profile.mjs
-node --test
+pnpm run merge
+pnpm test
 ```
 
 第一条命令获取最新墨鱼配置，再重新应用私人设置。下载、校验或合并失败时，不会覆盖现有生成文件。
@@ -62,7 +62,7 @@ https://raw.githubusercontent.com/wangruiStart/quanX/main/QuantumultX.conf
 **完整配置导入可能替换节点订阅与证书字段，不承诺 QuanX 自动保留。** 初次导入前备份当前配置，并将订阅和证书字段恢复到本机。希望每次更新都自动保留这些字段时，使用下面的本机生成方式：
 
 1. 从 QuanX 导出当前完整配置，存为项目的 `.local/current.conf`。该文件只保存在本机。
-2. 执行 `node scripts/build-profile.mjs --local-profile .local/current.conf`。
+2. 执行 `pnpm run merge --local-profile .local/current.conf`。
 3. 导入 `.local/QuantumultX.conf`。它保留本机 `[server_local]`、`[server_remote]`、MITM `p12` 与 `passphrase`。
 
 后续仍执行第 2 步即可。更换订阅或证书后，重新导出 `.local/current.conf`。本机输出移除 `@ConfigURL`，避免直接用公开模板更新导致本机凭据丢失。此模式没有把其他本机设置重新迁移，DNS、策略组和重写以 `personal.json` 为准。
@@ -72,7 +72,7 @@ https://raw.githubusercontent.com/wangruiStart/quanX/main/QuantumultX.conf
 ## 离线验证
 
 ```sh
-node scripts/build-profile.mjs --upstream-file /path/to/QuantumultX.conf
+pnpm run merge --upstream-file /path/to/QuantumultX.conf
 ```
 
 上游参考：[墨鱼配置](https://ddgksf2013.top/Profile/QuantumultX.conf)、[QuanX 官方示例](https://github.com/crossutility/Quantumult-X/blob/master/sample.conf)。保留上游作者信息和注释。

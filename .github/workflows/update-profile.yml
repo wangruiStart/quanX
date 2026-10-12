@@ -6,6 +6,7 @@ on:
     branches: [main]
     paths:
       - personal.json
+      - package.json
       - selfProxy.conf
       - scripts/build-profile.mjs
       - tests/build-profile.test.mjs

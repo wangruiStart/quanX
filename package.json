@@ -1,0 +1,12 @@
+{
+  "name": "quanx-personal-profile",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "merge": "node scripts/build-profile.mjs",
+    "test": "node --test"
+  }
+}
